@@ -78,8 +78,7 @@ The Glorious Glasgow Haskell Compilation System, version 8.6.5    # 8.10.4 is al
 Install the `primitive` and `eveff` package:
 ```
 $ cabal update
-$ cabal install --lib primitive     
-$ cabal install --lib eveff         
+$ cabal install primitive eveff    # use cabal install --lib on ghc 8.10+
 $ cabal info primitive eveff | grep installed:
 Versions installed: 0.7.1.0  # primitive
 Versions installed: 0.1.0.0  # eveff
@@ -104,9 +103,9 @@ Clone from the benchmark root directory (into the `effect-handlers` sub-director
 ```
 $ git clone https://github.com/slindley/effect-handlers -b ghc865
 $ cabal update
-$ cabal install --lib random pipes haskell-src-meta haskell-src-exts network
+$ cabal install random pipes haskell-src-meta haskell-src-exts network
 ```
-
+(again, use `cabal install --lib on ghc 8.10+)
 
 ## Libhandler
 
