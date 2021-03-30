@@ -233,7 +233,7 @@ in the previous step:
 $ ./out/kk/bench 
 ``` 
 
-Average over 10 runs with LaTeX graph:
+Median over 10 runs with LaTeX graph:
 ```
 $ ./out/kk/bench -i10 -c
 ``` 
@@ -248,7 +248,7 @@ Run for a particular language:
 $ ./out/kk/bench --test=counter --lang=c,kk,ev
 ``` 
 
-When generating an LaTeX graph, you can copy-and-paste the 
+When generating an LaTeX graph (`-c`), you can copy-and-paste the 
 LaTeX (in between the `~ begin snippet` blocks) 
 into the `graph/bench.tex` file, and then use 
 ```
