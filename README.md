@@ -104,7 +104,7 @@ Clone from the benchmark root directory (into the `effect-handlers` sub-director
 ```
 $ git clone https://github.com/slindley/effect-handlers -b ghc865
 $ cabal update
-$ cabal install random pipes haskell-src-meta haskell-src-exts network
+$ cabal install --lib random pipes haskell-src-meta haskell-src-exts network
 ```
 
 
@@ -128,6 +128,7 @@ and copy the final library to the `out` directory:
 ```bash
 libhandler$ cp out/gcc-amd64-linux-gnu/release/libhandler.a  out    # use platform specific path
 ```
+(this is `out/gcc-amd64-apple-darwin19.6.0/release/libhandler.a` on macOS)
 
 and move back up to the parent directory:
 ```bash

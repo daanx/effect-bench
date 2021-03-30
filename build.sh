@@ -324,7 +324,7 @@ function build_hia {
     if [ "$1" -nt "out/hia/$base" ]; then
       pushd out/hia
       cp -f ../../$1 $base.hs      
-      echo_cmd $1 "ghc -O2 -package haskell-src-exts -o $base  $base.hs"
+      echo_cmd $1 "ghc -O2 -package haskell-src-exts -package parsec -o $base  $base.hs"
       popd
     else
       echo "  up to date; skip re-compilation"
