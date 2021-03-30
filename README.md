@@ -105,7 +105,7 @@ $ git clone https://github.com/slindley/effect-handlers -b ghc865
 $ cabal update
 $ cabal install random pipes haskell-src-meta haskell-src-exts network
 ```
-(again, use `cabal install --lib on ghc 8.10+)
+(again, use `cabal install --lib` on ghc 8.10+)
 
 ## Libhandler
 
