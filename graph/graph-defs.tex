@@ -1,0 +1,144 @@
+%---------------------------------------------------------------------------
+%  Copyright 2021, Daan Leijen.
+%---------------------------------------------------------------------------
+
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+
+% more colors
+\definecolor{red}{HTML}{FF0000}
+\definecolor{lime}{HTML}{00FF00}
+\definecolor{blue}{HTML}{0000FF}
+
+\definecolor{yellow}{HTML}{FFFF00}
+\definecolor{cyan}{HTML}{00FFFF}
+\definecolor{magenta}{HTML}{FF00FF}
+
+\definecolor{navy}{HTML}{000080}
+\definecolor{maroon}{HTML}{800000}
+\definecolor{green}{HTML}{008000}
+\definecolor{darkgreen}{HTML}{006400}
+
+\definecolor{teal}{HTML}{008080}
+\definecolor{purple}{HTML}{800080}
+\definecolor{olive}{HTML}{808000}
+
+\definecolor{black}{HTML}{000000}
+\definecolor{dimgray}{HTML}{696969}
+\definecolor{gray}{HTML}{808080}
+\definecolor{darkgray}{HTML}{A9A9A9}
+\definecolor{silver}{HTML}{C0C0C0}
+\definecolor{lightgray}{HTML}{D3D3D3}
+\definecolor{gainsboro}{HTML}{DCDCDC}
+\definecolor{floralwhite}{HTML}{FFFAF0}
+\definecolor{ivory}{HTML}{FFFFF0}
+\definecolor{white}{HTML}{FFFFFF}
+
+\definecolor{orange}{HTML}{FFA500}
+\definecolor{aqua}{HTML}{00FFFF}
+\definecolor{fuchsia}{HTML}{FF00FF}
+
+% chart definitions
+\newcommand\chartdesc{\node[draw=black,%
+  anchor=north east,align=left,font=\tiny,nodes={inner sep=3pt}%
+  ] at (axis cs:\pgfkeysvalueof{/pgfplots/xmax},-0.4)}
+
+\newcommand\normlabel[1]{#1x}
+\newcommand\absnormlabel[1]{(#1s)}
+\newcommand\outernormlabel[1]{\ensuremath{\hspace{-1.15mm}\cdots}\normlabel{#1}}
+
+\newcommand\abslabel[1]{#1s}
+\newcommand\outerlabel[1]{\ensuremath{\hspace{-1.15mm}\cdots}\abslabel{#1}}
+
+\newcommand\drawplot[1]{\addplot[
+   draw=black,
+   fill=#1,
+   error bars/.cd,
+   y dir=both,
+   y explicit
+   ] plot table[
+     x index=0, 
+     y index=1, 
+     y error index=2,
+     meta index=3,
+     point meta=explicit symbolic
+   ]
+}
+
+\pgfplotsset{
+  Legend/.style = {
+      legend columns=1,
+      legend style={
+        %at={(axis cs:-0.5,-1)},
+        at={(axis cs:4.55,-0.01)},
+        font=\tiny,
+        anchor=south west,draw=black,
+        nodes={inner sep=1.5pt}
+      },
+      legend cell align={left},         
+  }
+}
+
+\pgfplotsset{
+  Chart/.style = {    
+    Legend,    
+    legend image code/.code={\draw[#1] (-0.1cm,-0.1cm) rectangle (0.1cm,0.5cm);},
+    ybar,
+    width=18cm,
+    height=7cm,
+    ymin=0,
+    ymax=3,
+    xmin=-0.5,
+    xmax=5.5,
+    label style={align=center,yshift=-1.75em,font=\footnotesize},
+    %xlabel={\small Benchmark},
+    xtick=data,
+    ytick={0,1,...,6},    
+    yticklabel style={font=\tiny},
+    xticklabel style={font=\scriptsize,yshift=0.25em},
+    nodes near coords,
+    every node near coord/.append style={font=\tiny,anchor=west,rotate=90,at={(0,4)}},
+    %every node near coord/.append style={anchor=west,rotate=90},
+    %major x tick style = {opacity=0},
+    minor x tick num = 1,
+    minor tick length=2ex,
+    bar width=4pt,
+    %y label style={yshift={-0.5em}},
+    legend image code/.code={\draw[#1] (0pt,-3pt) rectangle (3.25pt,5pt);}    
+  }
+}
+
+\pgfplotsset{
+  Chartnormtime/.style = {
+    Chart,
+    ylabel={\footnotesize relative time \scriptsize(lower is better)},
+    yticklabels = { 0x,1x,2x,3x,4x,5x }    
+  },
+  Chartnormrss/.style = {
+    Chart,
+    ylabel={\small relative rss \footnotesize(lower is better)},
+    yticklabels = { 0x,1x,2x,3x,4x,5x }
+  },
+  Chartabstime/.style = {
+    Chart,
+    ylabel={\footnotesize elapsed time \hspace{1ex}(lower is better)},
+    yticklabels = { 0s,1s,2s,3s,4s,5s,6s }
+  },
+  Chartabsrss/.style = {
+    Chart,
+    ylabel={\small rss \footnotesize(lower is better)},
+    yticklabels = { 0s,1s,2s,3s,4s,5s }
+  }  
+}
+
+
+\newcommand{\drawtime}[1]{\drawplot{#1}}
+\newcommand{\drawrss}[1]{\drawplot{#1}}
+\newcommand{\score}[1]{:\scriptsize{#1} }
+\newcommand{\lang}[1]{#1}
+
+
+%\newcommand\colortimebar[1]{navy!#1}
+%\newcommand\clrbar[2]{#1!#2}

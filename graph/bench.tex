@@ -1,0 +1,125 @@
+%-------------------------------------------
+% Paste here the Latex from the test 
+% (in beween the Snippet blocks)
+% Then use `pdflatex graph.tex` 
+% to generate a nice graph.
+%-------------------------------------------
+
+%-------------------------------------------
+% START PASTE
+%-------------------------------------------
+
+\pgfplotsset{
+  xticklabels = {\strut counter,\strut counter1,\strut counter10,\strut mstate,\strut nqueens}
+}
+
+\pgfplotstableread{
+x y y-error meta
+0 1.130 0.000 {\abslabel{1.13}}
+1 1.150 0.010 {\abslabel{1.15}}
+2 1.135 0.065 {\abslabel{1.13}}
+3 1.835 0.030 {\abslabel{1.83}}
+4 0.750 0.004 {\abslabel{0.75}}
+}\datatimekk
+
+\pgfplotstableread{
+x y y-error meta
+0 1.030 0.013 {\abslabel{1.03}}
+1 1.745 0.044 {\abslabel{1.75}}
+2 6.000 0.000 {\outerlabel{7.56}}
+3 0.380 0.000 {\abslabel{0.38}}
+4 3.170 0.310 {\abslabel{3.17}}
+}\datatimeml
+
+\pgfplotstableread{
+x y y-error meta
+0 4.655 0.029 {\abslabel{4.65}}
+1 4.560 0.023 {\abslabel{4.56}}
+2 5.575 0.019 {\abslabel{5.58}}
+3 1.435 0.021 {\abslabel{1.44}}
+4 1.260 0.081 {\abslabel{1.26}}
+}\datatimemp
+
+\pgfplotstableread{
+x y y-error meta
+0 0.260 0.013 {\abslabel{0.26}}
+1 2.200 0.030 {\abslabel{2.20}}
+2 2.885 0.080 {\abslabel{2.88}}
+3 0.560 0.000 {\abslabel{0.56}}
+4 0.540 0.024 {\abslabel{0.54}}
+}\datatimeev
+
+\pgfplotstableread{
+x y y-error meta
+0 1.280 0.009 {\abslabel{1.28}}
+1 2.880 0.009 {\abslabel{2.88}}
+2 6.000 0.000 {\outerlabel{10.81}}
+3 0.220 0.000 {\abslabel{0.22}}
+4 0.210 0.020 {\abslabel{0.21}}
+}\datatimehia
+
+\pgfplotstableread{
+x y y-error meta
+0 0.710 0.006 {\abslabel{0.71}}
+1 0.800 0.004 {\abslabel{0.80}}
+2 1.940 0.084 {\abslabel{1.94}}
+3 4.510 0.031 {\abslabel{4.51}}
+4 1.440 0.027 {\abslabel{1.44}}
+}\datatimelh
+
+\pgfplotstableread{
+x y y-error meta
+0 0.650 0.000 {\abslabel{0.65}}
+1 0.710 0.006 {\abslabel{0.71}}
+2 3.050 0.010 {\abslabel{3.05}}
+3 1.075 0.005 {\abslabel{1.08}}
+4 0.590 0.006 {\abslabel{0.59}}
+}\datatimelmp
+
+\pgfplotstableread{
+x y y-error meta
+0 6.000 0.000 {\outerlabel{11.70}}
+1 6.000 0.000 {\outerlabel{16.11}}
+2 6.000 0.000 {\outerlabel{44.44}}
+3 1.835 0.030 {\abslabel{1.83}}
+4 0.750 0.004 {\abslabel{0.75}}
+}\datatimekknt
+
+\pgfplotstableread{
+x y y-error meta
+0 4.640 0.006 {\abslabel{4.64}}
+1 4.700 0.009 {\abslabel{4.70}}
+2 6.000 0.000 {\outerlabel{7.87}}
+3 1.070 0.032 {\abslabel{1.07}}
+4 0.595 0.005 {\abslabel{0.59}}
+}\datatimelmpnt
+
+\pgfplotstableread{
+x y y-error meta
+0 0.050 0.000 {\abslabel{0.05}}
+1 0.050 0.000 {\abslabel{0.05}}
+2 0.050 0.000 {\abslabel{0.05}}
+3 0.010 0.000 {\abslabel{0.01}}
+4 0.130 0.000 {\abslabel{0.13}}
+}\datatimebase
+
+\begin{tikzpicture}\sffamily
+\begin{axis}[Chartabstime,ymax=6.0,height=5cm,xmax=4.5,width=14cm]
+
+  \drawtime{\colortimekk{0}}{\datatimekk};
+  \drawtime{\colortimeml{0}}{\datatimeml};
+  \drawtime{\colortimemp{0}}{\datatimemp};
+  \drawtime{\colortimeev{0}}{\datatimeev};
+  \drawtime{\colortimehia{0}}{\datatimehia};
+  \drawtime{\colortimelh{0}}{\datatimelh};
+  \drawtime{\colortimelmp{0}}{\datatimelmp};
+  \drawtime{\colortimekknt{0}}{\datatimekknt};
+  \drawtime{\colortimelmpnt{0}}{\datatimelmpnt};
+  \drawtime{\colortimebase{0}}{\datatimebase};
+  \legend{\langkk,\langml,\langmp,\langev,\langhia,\langlh,\langlmp,\langkknt,\langlmpnt,\langbase};
+\end{axis}
+\end{tikzpicture}
+
+%-------------------------------------------
+% END PASTE
+%-------------------------------------------

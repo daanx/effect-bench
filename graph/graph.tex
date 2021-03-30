@@ -1,0 +1,88 @@
+%---------------------------------------------------------------------------
+%  Copyright 2021, Daan Leijen.
+%---------------------------------------------------------------------------
+
+%-------------------------------------------
+% Put in the Latex from the test 
+% (in beween the Snippet blocks) into 
+% `bench.tex` and use `pdflatex graph.tex` 
+% to generate a nice graph.
+%-------------------------------------------
+
+\documentclass{article}
+
+% Graph definitions
+\include{graph-defs.tex}
+
+\usepackage{hyperref}
+
+% Legend
+
+\newcommand{\langkk}{\lang{Koka}}
+\newcommand{\langkknt}{\lang{Koka, no-tail-opt}}
+\newcommand{\langcpp}{\lang{C++}}
+\newcommand{\langlh}{\lang{libhandler (C)}}
+\newcommand{\langlhnt}{\lang{libhandler, no-tail-opt}}
+\newcommand{\langml}{\lang{multi-core OCaml}}
+\newcommand{\langsw}{\lang{Swift}}
+\newcommand{\langjv}{\lang{Java}}
+\newcommand{\langmp}{\lang{Mp.Eff (Haskell)}}
+\newcommand{\langmpnt}{\lang{Mp.Eff, no-tail-opt}}
+\newcommand{\langev}{\lang{Ev.Eff (Haskell)}}
+\newcommand{\langevnt}{\lang{Ev.Eff, no-tail-opt}}
+\newcommand{\langlmp}{\lang{libmprompt (C)}}
+\newcommand{\langlmpnt}{\lang{libmprompt, no-tail-opt}}
+\newcommand{\langhia}{\lang{HIA (Haskell)}}
+\newcommand{\langbase}{\lang{baseline (OCaml)}}
+
+% Colors
+
+\newcommand\colortimekk[1]{maroon!80}
+\newcommand\colortimekknt[1]{black!15}%black!55
+\newcommand\colortimecpp[1]{navy!50}
+\newcommand\colortimelh[1]{navy!50}
+\newcommand\colortimelhnt[1]{black!10}
+\newcommand\colortimeml[1]{orange!80}
+\newcommand\colortimesw[1]{green!60}
+\newcommand\colortimejv[1]{olive!50}
+\newcommand\colortimeev[1]{olive!50}
+\newcommand\colortimeevnt[1]{black!25}
+\newcommand\colortimemp[1]{teal!50}
+\newcommand\colortimempnt[1]{black!40}
+\newcommand\colortimelmp[1]{green!50}
+\newcommand\colortimelmpnt[1]{black!25}
+\newcommand\colortimehia[1]{purple!50}
+\newcommand\colortimebase[1]{yellow!30}
+
+\newcommand\colorrsskk[1]{maroon!60}
+\newcommand\colorrsskknt[1]{maroon!45}
+\newcommand\colorrsscpp[1]{navy!35}
+\newcommand\colorrsslh[1]{navy!35}
+\newcommand\colorrsslhnt[1]{navy!15}
+\newcommand\colorrssml[1]{orange!60}
+\newcommand\colorrsssw[1]{green!35}
+\newcommand\colorrssjv[1]{olive!35}
+\newcommand\colorrssev[1]{olive!35}
+\newcommand\colorrssevnt[1]{olive!15}
+\newcommand\colorrssmp[1]{teal!35}
+\newcommand\colorrssmpnt[1]{teal!25}
+\newcommand\colorrsslmp[1]{green!35}
+\newcommand\colorrsslmpnt[1]{green!25}
+\newcommand\colorrsshia[1]{blue!50}
+\newcommand\colorrssbase[1]{yellow!30}
+
+
+\begin{document}
+
+\begin{figure}
+
+% benchmark data
+\include{bench.tex}
+
+\caption{Effect benchmarks, \today}
+\label{fig:bench}
+\end{figure}
+
+\url{https://github.com/daanx/effect-bench}
+
+\end{document}
