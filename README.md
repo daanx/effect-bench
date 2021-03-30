@@ -111,27 +111,27 @@ $ cabal install random pipes haskell-src-meta haskell-src-exts network
 ## Libhandler
 
 Install [libhandler] from the benchmark root directory (into the `libhandler` sub-directory).
-```
+```bash
 $ git clone https://github.com/koka-lang/libhandler
 $ cd libhandler
 ```
 
 Build the library:
-```
-libhandler> ./configure
-libhandler> make depend
-libhandler> make VARIANT=release
-libhandler> make tests VARIANT=release
+```bash
+libhandler$ ./configure
+libhandler$ make depend
+libhandler$ make VARIANT=release
+libhandler$ make tests VARIANT=release
 ```
 
 and copy the final library to the `out` directory:
-```
-libhandler> cp out/gcc-amd64-linux-gnu/release/libhandler.a  out    # use platform specific path
+```bash
+libhandler$ cp out/gcc-amd64-linux-gnu/release/libhandler.a  out    # use platform specific path
 ```
 
 and move back up to the parent directory:
-```
-libhandler> cd ..
+```bash
+libhandler$ cd ..
 ```
 
 
