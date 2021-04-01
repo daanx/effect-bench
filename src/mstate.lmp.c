@@ -42,7 +42,7 @@ typedef struct function_s {
   long (*fun)(void*,long);
 } function_t;
 
-static long function_apply( function_t f, long arg ) {
+static inline long function_apply( function_t f, long arg ) {
   return (f.fun)(f.env,arg);
 }
 
@@ -124,7 +124,9 @@ static const mpe_handlerdef_t state_def = { MPE_EFFECT(mstate), NULL, NULL, &_st
 
 static void* state_handle(mpe_actionfun_t action, long st, void* arg) {
   function_t f = mpe_fun_voidp( mpe_handle(&state_def, NULL, action, arg) );
-  return mpe_voidp_long( function_apply( f, st ) );
+  return mpe_voidp_long( (f.fun)(f.env,st) );
+             //function_apply( f, st ) 
+             
 }
 
 /*-----------------------------------------------------------------
