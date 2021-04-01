@@ -292,7 +292,7 @@ function build_lmp {
   if test -f $1; then
     base=`basename $1 .lmp.c`
     if [ "$1" -nt "out/lmp/$base" ]; then
-      echo_cmd $1 "$ccomp -O3 -o out/lmp/$base -Ilibmprompt/include  $1 libmprompt/out/crelease/libmphandler.a libmprompt/out/crelease/libmprompt.a -lpthread"
+      echo_cmd $1 "$ccomp -O3 -o out/lmp/$base -Ilibmprompt/include  $1 libmprompt/out/crelease/libmpeff.a libmprompt/out/crelease/libmprompt.a -lpthread"
     else
       echo "  up to date; skip re-compilation"
     fi
@@ -307,7 +307,7 @@ function build_lmp_nt {
   if test -f $1; then
     base=`basename $1 .nt.lmp.c`
     if [ "$1" -nt "out/lmpnt/$base" ]; then
-      echo_cmd $1 "$ccomp -O3 -o out/lmpnt/$base -Ilibmprompt/include  $1 libmprompt/out/crelease/libmphandler.a libmprompt/out/crelease/libmprompt.a -lpthread"
+      echo_cmd $1 "$ccomp -O3 -o out/lmpnt/$base -Ilibmprompt/include  $1 libmprompt/out/crelease/libmpeff.a libmprompt/out/crelease/libmprompt.a -lpthread"
     else
       echo "  up to date; skip re-compilation"
     fi
