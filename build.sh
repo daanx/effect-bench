@@ -293,14 +293,10 @@ function build_lmp {
     base=`basename $1 .lmp.c`
     if [ "$1" -nt "out/lmp/$base" ]; then
       flto="-flto"
-      if [ "$base" = "mstate" ]; then
+      if [ "$base" = "mstate" ]; then  # with flto the tail-call is not optimized :-(
         flto=""
       fi
-      libmphnd="libmprompt/out/crelease/libmphnd.a"
-      if ! [ -f $libmphnd ]; then
-        libmphnd=""
-      fi
-      echo_cmd $1 "$ccomp -O3 $flto -o out/lmp/$base -Ilibmprompt/include  $1 libmprompt/out/crelease/libmpeff.a $libmphnd libmprompt/out/crelease/libmprompt.a -lpthread"
+      echo_cmd $1 "$ccomp -O3 $flto -o out/lmp/$base -Ilibmprompt/include  $1 libmprompt/out/crelease/libmpeff.a -lpthread"
     else
       echo "  up to date; skip re-compilation"
     fi
@@ -316,14 +312,10 @@ function build_lmp_nt {
     base=`basename $1 .nt.lmp.c`
     if [ "$1" -nt "out/lmpnt/$base" ]; then
       flto="-flto"
-      if [ "$base" = "mstate" ]; then
+      if [ "$base" = "mstate" ]; then # with flto the tail-call is not optimized :-(
         flto=""
       fi
-      libmphnd="libmprompt/out/crelease/libmphnd.a"
-      if ! [ -f $libmphnd ]; then
-        libmphnd=""
-      fi
-      echo_cmd $1 "$ccomp -O3 $flto -o out/lmpnt/$base -Ilibmprompt/include  $1 libmprompt/out/crelease/libmpeff.a $libmphnd libmprompt/out/crelease/libmprompt.a -lpthread"
+      echo_cmd $1 "$ccomp -O3 $flto -o out/lmpnt/$base -Ilibmprompt/include  $1 libmprompt/out/crelease/libmpeff.a  -lpthread"
     else
       echo "  up to date; skip re-compilation"
     fi
