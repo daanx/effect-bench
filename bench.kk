@@ -20,9 +20,8 @@ import std/os/flags
 
 val all-test-names = [
   "counter","counter1","counter10",
-  "mstate",
-  "nqueens",
-  //"rcounter","rcounter1","rcounter10" 
+  "mstate", "nqueens"
+  //"triple"
 ]
 
 val all-lang-names = [
@@ -33,11 +32,14 @@ val all-lang-names = [
   ("hia","hia"),
   ("libh","lh"),
   ("libmp","lmp"),
-  ("koka-nt","kknt"),
+  //("libmpw","lmpw"),
+  //("koka-nt","kknt"),
   //("haskell-nt","hsnt"),
   //("eveff-nt","evnt"),
   //("libh-nt","lhnt"),
-  ("libmp-nt","lmpnt"),
+  //("libmp-nt","lmpnt"),
+  //("lcap","lcap"),
+  //("llcap","llcap"),
   ("base","base")
 ]
 
@@ -194,7 +196,7 @@ fun run-tests(test-names : list<string>, lang-names : list<(string,string)>, gen
 
   // emit latex chart
   if (gen-chart) {
-    val ymax       = 6.0
+    val ymax       = 4.0
     val chart-desc = @"16-core AMD 5950X at 3.4Ghz\\Ubuntu 20.04, gcc 9.3.0"
     val chart-elapsed = if (normalize)
                           then chart("time", True, norm-elapsed, norm-elapsed-sdev, elapsed, test-names, lang-ntests, ymax, chart-desc)

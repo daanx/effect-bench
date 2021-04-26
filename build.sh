@@ -8,13 +8,16 @@ echo ""
 echo "Use '-h' or '--help' for help on configuration options."
 echo ""
 
-benchmarks="counter,counter1,counter10,mstate,nqueens" # ,rcounter,rcounter1,rcounter10"
+benchmarks="counter,counter1,counter10,mstate,nqueens,triple" 
 
 dobuild="yes"
 rebuild="no"
 rebuildlmp="no"
 verbose="no"
 ccomp="$CC"
+#kokac="koka"
+#kokac="stack --work-dir=~/home/dev/koka exec koka -- "
+kokac="/mnt/c/Users/daan/dev/koka/.stack-work/install/x86_64-linux-tinfo6/431d4e55f4d2e20c6f6be7ead520a8d7bf88ba5fd63586d6e397109ab1b784f0/8.8.4/bin/koka"
 
 if [ -z "$ccomp" ]; then
   ccomp="gcc -g"
@@ -36,6 +39,7 @@ makedir "out/lh"
 makedir "out/lhnt"
 makedir "out/lmp"
 makedir "out/lmpnt"
+makedir "out/lmpw"
 makedir "out/ev"
 #cp -f mpeff/Control/Ev/*.hs out/ev
 makedir "out/evnt"
@@ -46,6 +50,9 @@ makedir "out/mpnt"
 cp -f mpeff/src/Control/Mp/*.hs out/mpnt
 makedir "out/hia"
 cp -f effect-handlers/*.hs out/hia
+makedir "out/lcap"
+makedir "out/llcap"
+
 
 # Parse command-line arguments
 while : ; do
@@ -118,7 +125,7 @@ function build_kk {
   if test -f $1; then
     base=`basename $1 .kk`
     if [ "$1" -nt "out/kk/$base" ]; then
-      echo_cmd $1 "koka -c -O2 --builddir=out/kk -isrc -o $base $1"
+      echo_cmd $1 "$kokac -c -O2 --builddir=out/kk -isrc -o $base $1"
     else
       echo "  up to date; skip re-compilation"
     fi
@@ -133,7 +140,7 @@ function build_kk_nt {
   if test -f $1; then
     base=`basename $1 .nt.kk`
     if [ "$1" -nt "out/kknt/$base" ]; then
-      echo_cmd $1 "koka -c -O2 --builddir=out/kknt -isrc -o $base $1"
+      echo_cmd $1 "$kokac -c -O2 --builddir=out/kknt -isrc -o $base $1"
     else
       echo "  up to date; skip re-compilation"
     fi
@@ -160,13 +167,13 @@ function build_ml {
   fi
 }
 
-function build_base_ml {
+function build_base_ml {  # bench subdir
   echo 
   echo "-- build $1 ---------------------------------"
   if test -f $1; then
-    base=`basename $1 .base.ml`
-    if [ "$1" -nt "out/base/$base" ]; then
-      pushd out/base
+    base=`basename $1 .$2.ml`
+    if [ "$1" -nt "out/$2/$base" ]; then
+      pushd out/$2
       cp -f ../../$1 $base.ml
       echo_cmd $1 "ocamlopt -O3 -o $base $base.ml"
       popd
@@ -177,6 +184,8 @@ function build_base_ml {
     echo "  not found; skipping."
   fi
 }
+
+
 
 function build_mp {
   echo 
@@ -324,6 +333,25 @@ function build_lmp_nt {
   fi
 }
 
+function build_lmpw {
+  echo 
+  echo "-- build $1 ---------------------------------"
+  if test -f $1; then
+    base=`basename $1 .lmpw.c`
+    if [ "$1" -nt "out/lmpw/$base" ]; then
+      flto="-flto"
+      if [ "$base" = "mstate" ]; then  # with flto the tail-call is not optimized :-(
+        flto=""
+      fi
+      echo_cmd $1 "$ccomp -O3 $flto -o out/lmpw/$base -Ilibmprompt/include  $1 libmprompt/out/crelease/libmpwasm.a -lpthread"
+    else
+      echo "  up to date; skip re-compilation"
+    fi
+  else
+    echo "  not found; skipping."
+  fi
+}
+
 function build_hia {
   echo 
   echo "-- build $1 ---------------------------------"
@@ -346,34 +374,22 @@ function build_hia {
 if test $dobuild = "yes"; then
   for benchname in "${benches[@]}"; do
     bench="src/$benchname"
-    case "$bench" in
-      *.nt.kk)    build_kk_nt $bench;;
-      *.kk)       build_kk $bench;;
-      *.base.ml)  build_base_ml $bench;;
-      *.ml)       build_ml $bench;;
-      *.nt.ev.hs) build_ev_nt $bench;;
-      *.ev.hs)    build_ev $bench;;
-      *.nt.mp.hs) build_mp_nt $bench;;
-      *.mp.hs)    build_mp $bench;;      
-      *.nt.lmp.c)  build_lmp_nt $bench;;
-      *.lmp.c)     build_lmp $bench;;
-      *.nt.lh.c)  build_lh_nt $bench;;
-      *.lh.c)     build_lh $bench;;
-      *.hia.hs)   build_hia $bench;;      
-      *)    build_kk     "$bench.kk"
-            build_kk_nt  "$bench.nt.kk"
-            build_base_ml "$bench.base.ml"
-            build_ml     "$bench.ml"
-            build_mp     "$bench.mp.hs"
-            build_mp_nt  "$bench.nt.mp.hs"
-            build_ev     "$bench.ev.hs"
-            build_ev_nt  "$bench.nt.ev.hs"
-            build_hia    "$bench.hia.hs"
-            build_lh     "$bench.lh.c"
-            build_lh_nt  "$bench.nt.lh.c"
-            build_lmp     "$bench.lmp.c"
-            build_lmp_nt  "$bench.nt.lmp.c";;
-    esac
+    build_kk     "$bench.kk"
+    build_kk_nt  "$bench.nt.kk"
+    build_ml     "$bench.ml"
+    build_base_ml "$bench.base.ml"  "base"
+    build_base_ml "$bench.lcap.ml"  "lcap"
+    build_base_ml "$bench.llcap.ml" "llcap"
+    build_mp     "$bench.mp.hs"
+    build_mp_nt  "$bench.nt.mp.hs"
+    build_ev     "$bench.ev.hs"
+    build_ev_nt  "$bench.nt.ev.hs"
+    build_hia    "$bench.hia.hs"
+    build_lh     "$bench.lh.c"
+    build_lh_nt  "$bench.nt.lh.c"
+    build_lmp    "$bench.lmp.c"
+    build_lmp_nt "$bench.nt.lmp.c"
+    build_lmpw   "$bench.lmpw.c"    
   done
 fi
 
