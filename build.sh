@@ -32,9 +32,10 @@ function makedir {
 
 curdir=`pwd`
 makedir "out"
-makedir "out/kk"
-makedir "out/kknt"
-makedir "out/kkins"
+makedir "out/kk"      
+makedir "out/kknt"    
+makedir "out/kkins"   
+makedir "out/kkscut"
 makedir "out/ml"
 makedir "out/base"
 makedir "out/lh"
@@ -124,7 +125,7 @@ fi
 function build_kk {  # source_noext variant ("","nt","ins")
   if [ "$2" != "" ]; then
     if [ "$2" == "nt" ]; then
-      koka_comp="$kokac"  # use regular compiler, non-tail is done in source
+      koka_comp="$kokac"  # use regular compiler, non-tail is done in source 
     else
       koka_comp="$kokac-$2"
     fi      
@@ -388,6 +389,7 @@ if test $dobuild = "yes"; then
     build_kk "$bench" ""
     build_kk "$bench" "nt"
     build_kk "$bench" "ins"
+    build_kk "$bench" "scut"
 
     build_ml     "$bench.ml"
     build_base_ml "$bench.base.ml"  "base"

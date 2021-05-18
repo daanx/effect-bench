@@ -38,6 +38,7 @@ val all-lang-names = [
   //("libh-nt","lhnt"),
   //("libmp-nt","lmpnt"),
   ("koka-ins","kkins"),
+  ("koka-scut","kkscut"),
   ("koka-nt","kknt"),
   //("lcap","lcap"),
   //("llcap","llcap"),
