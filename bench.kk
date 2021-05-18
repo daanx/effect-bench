@@ -40,10 +40,10 @@ val all-lang-names = [
   ("koka-ins","kkins"),
   ("koka-scut","kkscut"),
   ("koka-binl","kkbinl"),
-  ("koka-nt","kknt"),
+  ("koka-nt","kknt")
   //("lcap","lcap"),
   //("llcap","llcap"),
-  ("base","base")
+  //("base","base")
 ]
 
 struct iflags {

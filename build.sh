@@ -394,19 +394,19 @@ if test $dobuild = "yes"; then
     build_kk "$bench" "binl"
 
     build_ml     "$bench.ml"
-    build_base_ml "$bench.base.ml"  "base"
-    build_base_ml "$bench.lcap.ml"  "lcap"
-    build_base_ml "$bench.llcap.ml" "llcap"
+    #build_base_ml "$bench.base.ml"  "base"
+    #build_base_ml "$bench.lcap.ml"  "lcap"
+    #build_base_ml "$bench.llcap.ml" "llcap"
     build_mp     "$bench.mp.hs"
-    build_mp_nt  "$bench.nt.mp.hs"
+    #build_mp_nt  "$bench.nt.mp.hs"
     build_ev     "$bench.ev.hs"
-    build_ev_nt  "$bench.nt.ev.hs"
+    #build_ev_nt  "$bench.nt.ev.hs"
     build_hia    "$bench.hia.hs"
     build_lh     "$bench.lh.c"
-    build_lh_nt  "$bench.nt.lh.c"
-    build_lmp    "$bench.lmp.c"
-    build_lmp_nt "$bench.nt.lmp.c"
-    build_lmpw   "$bench.lmpw.c"
+    #build_lh_nt  "$bench.nt.lh.c"
+    #build_lmp    "$bench.lmp.c"
+    #build_lmp_nt "$bench.nt.lmp.c"
+    #build_lmpw   "$bench.lmpw.c"
   done
 fi
 
