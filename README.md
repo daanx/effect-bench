@@ -12,13 +12,20 @@ Currently supported libraries and languages are:
 - `base` (extension `base.ml`), a plain _baseline_ version
    without using effect handlers directly in OCaml.
 
-And the variants without tail-resumptive optimization.
+And Koka compiler variants:
 
-- `kknt` (extension `.nt.kk`), _Koka_.
+- `kkins`  (extension `.ins.kk`), _Koka_ using insertion-ordered evidence.
+- `kkscut` (extension `.scut.kk`), _Koka_ without short-cut resumptions.
+- `kkbinl` (extension `.binl.kk`), _Koka_ without fast-path bind inlining.
+- `kknt`   (extension `.nt.kk`), _Koka_ without tail-resumptive optimization.
+
+And the variants of other systems without tail-resumptive optimization:
+
 - `hsnt` (extension `.nt.mp.hs`), _Mp.Eff_.
 - `evnt` (extension `.nt.ev.hs`), _Ev.Eff_.
 - `lhnt` (extension `.nt.lh.c`), _libhandler_.
 - `lmpnt` (extension `.nt.lmp.c`), _libmprompt_.
+
 
 The benchmark sources are in the [`src`](src) directory and consist of:
 
@@ -58,17 +65,17 @@ This is tested on Ubuntu 20.04 and macOS Catalina. Follow the installation instr
 
 ## Koka
 
-Install [koka]:
+Install [koka] v2.1.2:
 ```
-$ curl -sSL https://github.com/koka-lang/koka/releases/latest/download/install.sh | sh
+$ curl -sSL https://github.com/koka-lang/koka/releases/download/v2.1.2/install.sh | sh
 $ koka --version
-Koka 2.1.1, 17:46:03 Mar  8 2021 (ghc release version)
+Koka 2.1.2, 17:46:03 Mar  8 2021 (ghc release version)
 ```
 
 
 ## Haskell
 
-Install Ghc and Cabal:
+Install Ghc 8.6.5 and Cabal:
 ```
 $ sudo apt-get install ghc cabal      # on macOS: > brew install ghc cabal-install
 $ ghc --version
@@ -106,6 +113,7 @@ $ cabal update
 $ cabal install random pipes haskell-src-meta haskell-src-exts network
 ```
 (again, use `cabal install --lib` on ghc 8.10+)
+
 
 ## Libhandler
 
@@ -189,6 +197,25 @@ $ eval $(opam env)
 ``` 
 to switch to the right version. (Use `opam switch list` to see the
 installed [variants](https://discuss.ocaml.org/t/how-does-one-switch-ocaml-version/4702))
+
+
+## Koka Variants
+
+For all the Koka compiler variants we need to build from special branches.
+Get the Koka sources:
+```
+$ git clone --recursive https://github.com/koka-lang/koka
+$ cd koka
+```
+
+Now build and install with each of the following branches: `evins`, `scut`, and `binl`, 
+which create the variant `ins`, `scut`, and `binl` respectively.
+```
+$ git checkout <branch>
+$ stack build
+$ stack exec koka -- util/bundle
+$ util/install.hs -b dist/koka-v2.1.2-<variant>-linux-amd64.tar.gz    $ or -osx-amd64.tar.gz on macOS
+```
 
 
 
