@@ -23,7 +23,7 @@ fun reader( init : int, action ) {
   action()
 }
 
-fun counter( c : int32 ) {
+fun counter( c : int32 ) : <ask,ask,ask,ask,ask,ask,ask,ask,ask,ask,st,div> int {
   val i = get()
   if (i==zero) then c.int else {
     set(i.dec)
@@ -34,5 +34,14 @@ fun counter( c : int32 ) {
 fun main() {
   with state(100100100.int32)
   with reader(0)
+  with reader(1)
+  with reader(2)
+  with reader(3)
+  with reader(4)
+  with reader(5)
+  with reader(6)
+  with reader(7)
+  with reader(8)
+  with reader(9)
   counter(zero).println
 }

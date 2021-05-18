@@ -23,7 +23,7 @@ fun reader( init : int, action ) {
   action()
 }
 
-fun counter( c : int32 ) {
+fun counter( c : int32 ) : <ask,st,div> int {
   val i = get()
   if (i==zero) then c.int else {
     set(i.dec)

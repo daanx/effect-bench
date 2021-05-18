@@ -20,8 +20,8 @@ import std/os/flags
 
 val all-test-names = [
   "counter","counter1","counter10",
-  "mstate", "nqueens"
-  //"triple"
+  "mstate", "nqueens",
+  "triple"
 ]
 
 val all-lang-names = [
@@ -29,15 +29,16 @@ val all-lang-names = [
   ("ocaml","ml"),
   ("mpeff","mp"),
   ("eveff","ev"),
-  ("hia","hia"),
   ("libh","lh"),
-  ("libmp","lmp"),
+  //("libmp","lmp"),
   //("libmpw","lmpw"),
-  //("koka-nt","kknt"),
+  //("hia","hia"),
   //("haskell-nt","hsnt"),
   //("eveff-nt","evnt"),
   //("libh-nt","lhnt"),
   //("libmp-nt","lmpnt"),
+  ("koka-ins","kkins"),
+  ("koka-nt","kknt"),
   //("lcap","lcap"),
   //("llcap","llcap"),
   ("base","base")

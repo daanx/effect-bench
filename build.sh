@@ -15,9 +15,10 @@ rebuild="no"
 rebuildlmp="no"
 verbose="no"
 ccomp="$CC"
-#kokac="koka"
+kokac="koka-v2.1.2"
+
 #kokac="stack --work-dir=~/home/dev/koka exec koka -- "
-kokac="/mnt/c/Users/daan/dev/koka/.stack-work/install/x86_64-linux-tinfo6/431d4e55f4d2e20c6f6be7ead520a8d7bf88ba5fd63586d6e397109ab1b784f0/8.8.4/bin/koka"
+#kokac="/mnt/c/Users/daan/dev/koka/.stack-work/install/x86_64-linux-tinfo6/431d4e55f4d2e20c6f6be7ead520a8d7bf88ba5fd63586d6e397109ab1b784f0/8.8.4/bin/koka"
 
 if [ -z "$ccomp" ]; then
   ccomp="gcc -g"
@@ -33,6 +34,7 @@ curdir=`pwd`
 makedir "out"
 makedir "out/kk"
 makedir "out/kknt"
+makedir "out/kkins"
 makedir "out/ml"
 makedir "out/base"
 makedir "out/lh"
@@ -119,35 +121,44 @@ fi
 
 # -------------------------------------------------------------
 # building
-function build_kk {
+function build_kk {  # source_noext variant ("","nt","ins")
+  if [ "$2" != "" ]; then
+    if [ "$2" == "nt" ]; then
+      koka_comp="$kokac"  # use regular compiler, non-tail is done in source
+    else
+      koka_comp="$kokac-$2"
+    fi      
+    koka_ext=".$2.kk"
+  else
+    koka_comp="$kokac"
+    koka_ext=".kk"
+  fi
+  koka_source="$1$koka_ext"
+  if [ -f $koka_source ]; then  # often we can reuse an existing kk source for compiler variants
+    base=`basename $koka_source $koka_ext`    
+  else
+    if [ -f $1.kk ]; then
+      koka_source="$1.kk"
+      base=`basename $koka_source .kk`
+    else 
+      base=""
+    fi
+  fi
   echo 
-  echo "-- build $1 ---------------------------------"
-  if test -f $1; then
-    base=`basename $1 .kk`
-    if [ "$1" -nt "out/kk/$base" ]; then
-      echo_cmd $1 "$kokac -c -O2 --builddir=out/kk -isrc -o $base $1"
+  echo "-- build $koka_source ($2) ---------------------------------"
+  if [ "$base" != "" ]; then
+    if [ "$koka_source" -nt "out/kk$2/$base" ]; then      
+      echo_cmd $1 "$koka_comp -c -O2 --builddir=out/kk$2 -isrc -o $base $koka_source"
     else
       echo "  up to date; skip re-compilation"
     fi
   else
     echo "  not found; skipping."
   fi
+
 }
 
-function build_kk_nt {
-  echo 
-  echo "-- build $1 ---------------------------------"
-  if test -f $1; then
-    base=`basename $1 .nt.kk`
-    if [ "$1" -nt "out/kknt/$base" ]; then
-      echo_cmd $1 "$kokac -c -O2 --builddir=out/kknt -isrc -o $base $1"
-    else
-      echo "  up to date; skip re-compilation"
-    fi
-  else
-    echo "  not found; skipping."
-  fi
-}
+
 
 function build_ml {
   echo 
@@ -374,8 +385,10 @@ function build_hia {
 if test $dobuild = "yes"; then
   for benchname in "${benches[@]}"; do
     bench="src/$benchname"
-    build_kk     "$bench.kk"
-    build_kk_nt  "$bench.nt.kk"
+    build_kk "$bench" ""
+    build_kk "$bench" "nt"
+    build_kk "$bench" "ins"
+
     build_ml     "$bench.ml"
     build_base_ml "$bench.base.ml"  "base"
     build_base_ml "$bench.lcap.ml"  "lcap"
@@ -389,12 +402,12 @@ if test $dobuild = "yes"; then
     build_lh_nt  "$bench.nt.lh.c"
     build_lmp    "$bench.lmp.c"
     build_lmp_nt "$bench.nt.lmp.c"
-    build_lmpw   "$bench.lmpw.c"    
+    build_lmpw   "$bench.lmpw.c"
   done
 fi
 
 # build benchmark script
-build_kk "bench.kk"
+build_kk "bench" ""
 
 echo ""
 echo "--------------------------------------------------"

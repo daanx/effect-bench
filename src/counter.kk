@@ -14,7 +14,7 @@ fun state( i : int32, action : () -> <st|e> a ) : e a {
   action()
 }
 
-fun counter( c : int32 ) : <st,div> int {
+fun counter( c : int32 ) {
   val i = get()
   if (i==zero) then c.int else {
     set(i.dec)
