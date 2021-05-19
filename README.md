@@ -77,7 +77,7 @@ Koka 2.1.2, 17:46:03 Mar  8 2021 (ghc release version)
 
 Install Ghc 8.6.5 and Cabal:
 ```
-$ sudo apt-get install ghc cabal      # on macOS: > brew install ghc cabal-install
+$ sudo apt-get install ghc cabal-install      # on macOS: > brew install ghc cabal-install
 $ ghc --version
 The Glorious Glasgow Haskell Compilation System, version 8.6.5    # 8.10.4 is also good
 ```
@@ -180,6 +180,9 @@ $ opam switch create 4.10.0+multicore --packages=ocaml-variants.4.10.0+multicore
 $ eval $(opam env)  # ensure the right variant is used
 ```
 
+(note: If installing in a docker container (or WSL) you may need to disable sandboxing,
+see <https://github.com/ocaml/opam/issues/3634>)
+
 Install Dune (and lwt (not sure if required for the benchmarks))
 ```
 $ opam install dune lwt
@@ -208,15 +211,21 @@ $ git clone --recursive https://github.com/koka-lang/koka
 $ cd koka
 ```
 
-Now build and install with each of the following branches: `evins`, `scut`, and `binl`, 
-which create the variant `ins`, `scut`, and `binl` respectively.
+Possibly install `stack`:
 ```
-$ git checkout <branch>
-$ stack build
-$ stack exec koka -- util/bundle
-$ util/install.hs -b dist/koka-v2.1.2-<variant>-linux-amd64.tar.gz    $ or -osx-amd64.tar.gz on macOS
+$ curl -sSL https://get.haskellstack.org/ | sh
 ```
 
+Now build and install with each of the following branches: `evins`, `scut`, and `binl`, 
+which create the variants `ins`, `scut`, and `binl` respectively.
+```
+$ git checkout artifact/<branch>
+$ stack build
+$ stack exec koka -- util/bundle      # may need to try twice for the scut variant
+$ util/install.sh -b dist/koka-v2.1.2-<variant>-linux-amd64.tar.gz    # or -osx-amd64.tar.gz on macOS
+$ git reset --hard HEAD               # reset in case the cabal file was modified
+```
+(and answer No if asked to uninstall a previous version!)
 
 
 # Building the Benchmarks
