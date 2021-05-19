@@ -1,12 +1,12 @@
 # Introduction
 
 Section 5, Figure 6 of the paper contains the benchmarks.
-First start the provided docker image:
+First pull and run the provided docker image:
 ```
-$ docker run -it -w/root/effect-bench-artifact test-multip-icfp21-artifact
+$ docker pull daanx/icfp21-multip-artifact:1.0
+$ docker run -it -w/root/effect-bench-artifact daanx/icfp21-multip-artifact:1.0
 ```
-
-The benchmarks can now be run as:
+We now see the docker prompt, and the benchmarks can now be run as:
 ```
 root:~/effect-bench-artifact$ out/kk/bench
 ```
@@ -57,11 +57,7 @@ root:~/effect-bench-artifact$ ./out/kk/bench --test=counter --lang=c,kk,ev
   - (already present: `kknt` (extension `.nt.kk`) Koka without tail-resumptive
     optimization)
 
-  As we can see at the sample output in the next Section ([#sec-sample])
-  insertion-order shows the high linear search overhead in
-  `count1`/`count10`; short-cut resumption offer a modest 10% improvement in
-  `mstate`/`nqueens`, bind-inlining speeds up the `count` benchmarks by 25% and
-  tail-resumptive optimization speeds up the `count` benchmarks by 10x.
+  As we can see at the sample output in the next Section ([#sec-sample]).
 
 * The benchmark sources are in the `src` directory and are all made to test
   effect handling aspects specifically and minimize any other computation. These consist of:
@@ -77,9 +73,8 @@ root:~/effect-bench-artifact$ ./out/kk/bench --test=counter --lang=c,kk,ev
     first-class resumptions captured under a lambda.
   - `nqueens`: the nqueens 12 problem using a multiple resumes to implement
     backtracking. This measures the impact of multi-shot resumptions.
-
-* We were also asked by the reviewers to add the `triple` benchmark which uses multi-shot
-  resumptions to search for pythogorean triples. As such, it behaves similar to `nqueens`.
+  - `triple` uses multi-shot resumptions to search for pythogorean triples. As
+    such, it behaves similar to `nqueens`.
 
 * To make the benchmarking between systems as fair as possible we adjust each 
   benchmark to fit the target system. In particular:
@@ -165,7 +160,7 @@ triple,  kknt,  1.07s ~0.000, 2628kb
 ```
 
 
-# Installing 
+# Installing From Scratch
 
 We highly recommend the use of the Docker image as an install from scratch is a
 lot work due to all the different systems required. 
@@ -173,6 +168,15 @@ lot work due to all the different systems required.
 The following commands were used to prepare the Docker image, this is tested on
 Ubuntu 20.04 and macOS Catalina. Follow the installation instructions carefully.
 
+First checkout the effect benchmarks suite:
+```
+$ git clone https://github.com/daanx/effect-bench -b artifact
+```
+
+The rest of the installation should be run inside the `effect-bench` directory.
+```
+$ cd effect-bench
+```
 
 ## Koka
 
@@ -188,18 +192,19 @@ Koka 2.1.2, 17:46:03 Mar  8 2021 (ghc release version)
 
 Install Ghc 8.6.5 and Cabal:
 ```
-$ sudo apt-get install ghc cabal-install      # on macOS: > brew install ghc cabal-install
+$ sudo apt-get install ghc cabal-install      
 $ ghc --version
-The Glorious Glasgow Haskell Compilation System, version 8.6.5    # 8.10.4 is also good
+The Glorious Glasgow Haskell Compilation System, version 8.6.5 
 ```
+(on macOS, use brew, like `$ brew install ghc cabal-install`)
 
 Install the `primitive` and `eveff` package:
 ```
 $ cabal update
-$ cabal install primitive eveff    # use cabal install --lib on ghc 8.10+
+$ cabal install primitive eveff    
 $ cabal info primitive eveff | grep installed:
-Versions installed: 0.7.1.0  # primitive
-Versions installed: 0.1.0.0  # eveff
+Versions installed: 0.7.1.0  
+Versions installed: 0.1.0.0  
 ```
 
 ## Ev.Eff
@@ -217,7 +222,7 @@ $ git clone https://github.com/xnning/mpeff
 ## Handlers-in-Action
 
 Tested with ghc 8.6.5.
-Clone from the benchmark root directory (into the `effect-handlers` sub-directory).
+Clone from the benchmark root directory (`effect-bench`) (into the `effect-handlers` sub-directory).
 ```
 $ git clone https://github.com/slindley/effect-handlers -b ghc865
 $ cabal update
@@ -332,12 +337,18 @@ which create the variants `ins`, `scut`, and `binl` respectively.
 ```
 koka$ git checkout artifact/<branch>
 koka$ stack build
-koka$ stack exec koka -- util/bundle      # may need to try twice for the scut variant
-koka$ util/install.sh -b dist/koka-v2.1.2-<variant>-linux-amd64.tar.gz    # or -osx-amd64.tar.gz on macOS
-koka$ git reset --hard HEAD               # reset in case the cabal file was modified
+koka$ stack exec koka -- util/bundle      
+koka$ util/install.sh -b dist/koka-v2.1.2-<variant>-linux-amd64.tar.gz    
+koka$ git reset --hard HEAD               
 ```
-(and answer `No` if asked to uninstall a previous version!)
+Notes:
 
+- answer `No` if asked to uninstall a previous version!)
+- the first `util/bundle` build may fail in the `scut` variant, run it again.
+- on macOSX, the bundle name ends with `-osx-amd64.tar.gz`
+- the git `reset` is needed in case the cabal file changes.
+
+And go back up again:
 ```
 koka$ cd ..
 ```
