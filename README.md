@@ -1,6 +1,4 @@
-pre {
-  font-size: small;
-}
+pre { font-size: small; }
 
 # Introduction
 
@@ -200,7 +198,7 @@ First checkout the effect benchmarks suite:
 ```
 $ git clone https://github.com/daanx/effect-bench -b artifact
 ```
-(or checkout commit `94f095a` instead of the `artifact` branch)
+(or checkout commit `be0fec3` instead of the `artifact` branch)
 The rest of the installation should be run inside the `effect-bench` directory.
 ```
 $ cd effect-bench
