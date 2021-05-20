@@ -108,7 +108,7 @@ The benchmarks folder consists of:
   From this the standard Koka is build (`koka-v2.1.2`), as well
   as the variants `koka-v2.1.2-scut`, `koka-v2.1.2-ins`, and `koka-v2.1.2-binl`.
   (we do not need a `kknt` variant as that is done in the benchmark sources
-  and needs to changes to the compiler internally).
+  and needs no changes to the compiler internally).
   The variants were build by checking out the branches `artifact/scut`,
   `artifact/evins`, and `artifact/binl` respectively (see below for build 
   instructions if needed).
@@ -385,6 +385,7 @@ notes:
 all builds successful.
 ```
 
+(note: You may have to run `eval $(opam env)` again if `ocamlopt` cannot be found)
 
 # Running the Benchmarks
 
