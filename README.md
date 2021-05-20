@@ -1,10 +1,14 @@
+pre {
+  font-size: small;
+}
+
 # Introduction
 
 Section 5, Figure 6 of the paper contains the benchmarks.
 First pull and run the provided docker image:
 ```
-$ docker pull daanx/icfp21-multip-artifact:1.0
-$ docker run -it -w/root/effect-bench-artifact daanx/icfp21-multip-artifact:1.0
+$ docker pull daanx/icfp21-multip-artifact:1.1
+$ docker run -it -w/root/effect-bench-artifact daanx/icfp21-multip-artifact:1.1
 ```
 We now see the docker prompt, and the benchmarks can now be run as:
 ```
@@ -38,29 +42,37 @@ root:~/effect-bench-artifact$ ./out/kk/bench --test=counter --lang=c,kk,ev
 
 ## Benchmark Overview
 
-* The tested systems in the paper are:
+The tested systems in the paper are:
 
-  - `kk` (extension `.kk`), [Koka] 2.1.2 (the paper still has 2.0.16 but perf stayed the same).
-  - `ml` (extension `.ml`), [multi-core OCaml][mcocaml] 4.10.1.
-  - `mp` (extension `.mp.hs`), [Mp.Eff] Haskell library.
-  - `ev` (extension `.ev.hs`), [Ev.Eff] Haskell library.
-  - `lh` (extension `.lh.c`), [libhandler] C library (v0.5).
-  - `kknt` (extension `.nt.kk`), Koka without tail-resumptive optimization.
+- `kk` (extension `.kk`), [Koka] 2.1.2.
+- `ml` (extension `.ml`), [multi-core OCaml][mcocaml] 4.10.1.
+- `mp` (extension `.mp.hs`), [Mp.Eff] Haskell library.
+- `ev` (extension `.ev.hs`), [Ev.Eff] Haskell library.
+- `lh` (extension `.lh.c`), [libhandler] C library (v0.5).
+- `kkins` (extension `.ins.kk`), Koka with insertion ordered evidence.
+- `kkscut` (extension `.scut.kk`), Koka without short-cut resumptions.
+- `kkbinl` (extension `.binl.kk`), Koka without bind-inlining.
+- `kknt` (extension `.nt.kk`) Koka without tail-resumptive optimization.
 
-* We were asked to also evaluate the impact of each optimization
-  individually _within_ Koka. We performed these experiments where we
-  evaluated the individual impact of each optimization, and we added:
+You can see sample output in the next Section ([#sec-sample]).
 
-  - `kkins` (extension `.ins.kk`), Koka with insertion ordered evidence 
-  - `kkscut` (extension `.scut.kk`), Koka without short-cut resumptions 
-  - `kkbinl` (extension `.binl.kk`), Koka without bind-inlining
-  - (already present: `kknt` (extension `.nt.kk`) Koka without tail-resumptive
-    optimization)
+To make the benchmarking between systems as fair as possible we adjust each 
+benchmark to fit the target system. In particular:
 
-  As we can see at the sample output in the next Section ([#sec-sample]).
+- We use native ints when possible (`Int` in Haskell, `int` in ML and C, and
+  `int32` in Koka)
+- Koka uses sometimes `rcontrol` (raw control) to avoid running finally
+  clauses automatically (in `mstate`)
 
-* The benchmark sources are in the `src` directory and are all made to test
-  effect handling aspects specifically and minimize any other computation. These consist of:
+The benchmarks folder consists of:
+
+* `/src`: the sources for all the benchmarks. Each benchmark
+  has an extension for each variant (for example `counter.ml`, or `counter1.ev.hs`).
+  For the internal Koka variants most of the time the `.kk` source is used
+  unless a specific version exists (like `counter.nt.kk` for non tail-resumptive optimization).
+  
+  Each benchmark is designed to test effect handling aspects specifically and
+  minimize any other computation. These consist of:
 
   - `counter`: tight loop with state effect handler doing a `get` and `put`
     (tail-resumptive) operation per iteration (100M). This tests the impact of
@@ -73,17 +85,33 @@ root:~/effect-bench-artifact$ ./out/kk/bench --test=counter --lang=c,kk,ev
     first-class resumptions captured under a lambda.
   - `nqueens`: the nqueens 12 problem using a multiple resumes to implement
     backtracking. This measures the impact of multi-shot resumptions.
-  - `triple` uses multi-shot resumptions to search for pythogorean triples. As
+  - `triple` uses multi-shot resumptions to search for Pythagorean triples. As
     such, it behaves similar to `nqueens`.
 
-* To make the benchmarking between systems as fair as possible we adjust each 
-  benchmark to fit the target system. In particular:
+* `/out`: the output folder for all benchmarks. The benchmarks can be
+  re-build by invoking `./build.sh` (see below for instructions if needed)
 
-  - We use native ints when possible (`Int` in Haskell, `int` in ML and C, and
-    `int32` in Koka)
-  - Koka uses sometimes `rcontrol` (raw control) to avoid running finally
-    clauses automatically (in `mstate`)
+  - `/out/kk/bench`: the benchmark program compiled from `bench.kk`.
+    This runs all benchmarks and calculates the median of the timings.
+  - `/out/<variant>`: the generated benchmark programs for a particular
+    variant. For the Koka compiler variants, one can inspect the 
+    generated C code here, and for example see the bind-inlining at
+    work by comparing `/out/kk/counter.c` with `/out/kkbinl/counter.c`.
 
+* `/graph`: helper folder to generate a bar graph from test results.
+
+* `/libhandler`: sources for the [libhandler] C library (v0.5).
+
+* `/mpeff`: sources for the [Mp.Eff] library.
+
+* `/koka`: sources for the [Koka] compiler. Checked out from tag `v2.1.2`.
+  From this the standard Koka is build (`koka-v2.1.2`), as well
+  as the variants `koka-v2.1.2-scut`, `koka-v2.1.2-ins`, and `koka-v2.1.2-binl`.
+  (we do not need a `kknt` variant as that is done in the benchmark sources
+  and needs to changes to the compiler internally).
+  The variants were build by checking out the branches `artifact/scut`,
+  `artifact/evins`, and `artifact/binl` respectively (see below for build 
+  instructions if needed).
 
 
 # Sample output on an AMD5950x, Ubuntu 20.04  {#sec-sample;}
@@ -172,7 +200,7 @@ First checkout the effect benchmarks suite:
 ```
 $ git clone https://github.com/daanx/effect-bench -b artifact
 ```
-
+(or checkout commit `616dba2` instead of the `artifact` branch)
 The rest of the installation should be run inside the `effect-bench` directory.
 ```
 $ cd effect-bench
@@ -219,18 +247,6 @@ Clone from the benchmark root directory (into the `mpeff` sub-directory).
 $ git clone https://github.com/xnning/mpeff
 ```
 
-## Handlers-in-Action
-
-Tested with ghc 8.6.5.
-Clone from the benchmark root directory (`effect-bench`) (into the `effect-handlers` sub-directory).
-```
-$ git clone https://github.com/slindley/effect-handlers -b ghc865
-$ cabal update
-$ cabal install random pipes haskell-src-meta haskell-src-exts network
-```
-(again, use `cabal install --lib` on ghc 8.10+)
-
-
 ## Libhandler
 
 Install [libhandler] from the benchmark root directory (into the `libhandler` sub-directory).
@@ -249,35 +265,14 @@ libhandler$ make tests VARIANT=release
 
 and copy the final library to the `out` directory:
 ```bash
-libhandler$ cp out/gcc-amd64-linux-gnu/release/libhandler.a  out    # use platform specific path
+libhandler$ cp out/gcc-amd64-linux-gnu/release/libhandler.a out
 ```
-(this is `out/gcc-amd64-apple-darwin19.6.0/release/libhandler.a` on macOS)
+(use a platform specific path,
+ this is `out/gcc-amd64-apple-darwin19.6.0/release/libhandler.a` on macOS)
 
 and move back up to the parent directory:
 ```bash
 libhandler$ cd ..
-```
-
-
-## Libmprompt
-
-Install [libmprompt] from the benchmark root directory (into the `libmprompt` sub-directory).
-```
-$ git clone https://github.com/koka-lang/libmprompt
-$ cd libmprompt
-```
-
-Build the library:
-```
-libmprompt$ mkdir -p out/crelease            # must be `out/crelease`
-libmprompt$ cd out/crelease
-libmprompt/out/crelease$ cmake ../.. -DMP_USE_C=ON
-libmprompt/out/crelease$ make
-```
-
-and move back up to the parent benchmark directory:
-```
-libmprompt/out/crelease$ cd ../../..
 ```
 
 
@@ -287,21 +282,26 @@ Install Opam: <https://opam.ocaml.org/doc/Install.html>:
 ```
 $ sh <(curl -sL https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh)
 ```
-
-Install Multi-core OCaml with new parallel_minor_gc:
+You may need to run:
 ```
-$ opam init    # if this is the first time running opam, and maybe you need to run: > eval $(opam env)
+$ eval $(opam env)
+```
+to initialize the Opam environment. Install Multi-core OCaml with new parallel_minor_gc:
+```
+$ opam init   
 $ opam update  
-$ opam switch create 4.10.0+multicore --packages=ocaml-variants.4.10.0+multicore --repositories=multicore=git+https://github.com/ocaml-multicore/multicore-opam.git,default
-$ eval $(opam env)  # ensure the right variant is used
+$ opam switch create 4.10.0+multicore 
+    --packages=ocaml-variants.4.10.0+multicore 
+    --repositories=multicore=git+https://github.com/ocaml-multicore/multicore-opam.git,default
+$ eval $(opam env)
 ```
 
 (note: If installing in a docker container (or WSL) you may need to disable sandboxing,
 see <https://github.com/ocaml/opam/issues/3634>)
 
-Install Dune (and lwt (not sure if required for the benchmarks))
+Install Dune 
 ```
-$ opam install dune lwt
+$ opam install dune 
 ```
 
 Test installation:
@@ -343,10 +343,10 @@ koka$ git reset --hard HEAD
 ```
 Notes:
 
-- answer `No` if asked to uninstall a previous version!)
-- the first `util/bundle` build may fail in the `scut` variant, run it again.
-- on macOSX, the bundle name ends with `-osx-amd64.tar.gz`
-- the git `reset` is needed in case the cabal file changes.
+- Answer `No` if asked to uninstall a previous version!
+- The first `util/bundle` build may fail in the `scut` variant, run it again.
+- On macOSX, the bundle name ends with `-osx-amd64.tar.gz`
+- The git `reset` is needed in case the cabal file changes.
 
 And go back up again:
 ```
