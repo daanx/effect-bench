@@ -19,7 +19,7 @@ MPE_DEFINE_VOIDOP0(choice, fail)
 -----------------------------------------------------------------*/
 MPE_DEFINE_EFFECT1(yield, yield)
 MPE_DEFINE_VOIDOP1(yield, yield, long)
-
+ 
 
 /*-----------------------------------------------------------------
   Benchmark
@@ -53,7 +53,7 @@ static void* _choice_result(void* local, void* arg) {
 static void* _choice_fail(mpe_resume_t* rc, void* local, void* arg) {
   unreferenced(local);
   unreferenced(arg);  
-  mpe_resume_release(rc)
+  mpe_resume_release(rc);
   return mpe_voidp_int(0);
 }
 
@@ -72,7 +72,7 @@ static void* _choice_choose(mpe_resume_t* rc, void* local, void* arg) {
 
 static const mpe_handlerdef_t choice_def = { MPE_EFFECT(choice), &_choice_result, {
   { MPE_OP_SCOPED, MPE_OPTAG(choice,choose), &_choice_choose },
-  { MPE_OP_NEVER, MPE_OPTAG(choice,fail), &_choice_fail },
+  { MPE_OP_ABORT, MPE_OPTAG(choice,fail), &_choice_fail },
   { MPE_OP_NULL, mpe_op_null, NULL }
 } };
 

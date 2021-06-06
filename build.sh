@@ -404,7 +404,7 @@ if test $dobuild = "yes"; then
     build_hia    "$bench.hia.hs"
     build_lh     "$bench.lh.c"
     #build_lh_nt  "$bench.nt.lh.c"
-    #build_lmp    "$bench.lmp.c"
+    build_lmp    "$bench.lmp.c"
     #build_lmp_nt "$bench.nt.lmp.c"
     #build_lmpw   "$bench.lmpw.c"
   done

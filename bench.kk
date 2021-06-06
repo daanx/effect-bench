@@ -30,7 +30,7 @@ val all-lang-names = [
   ("mpeff","mp"),
   ("eveff","ev"),
   ("libh","lh"),
-  //("libmp","lmp"),
+  ("libmp","lmp"),
   //("libmpw","lmpw"),
   //("hia","hia"),
   //("haskell-nt","hsnt"),
