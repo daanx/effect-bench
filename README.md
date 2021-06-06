@@ -137,7 +137,7 @@ libhandler$ cd ..
 
 ## Libmprompt
 
-Install [libmprompt] from the benchmark root directory (into the `libmprompt` sub-directory).
+Install [libmprompt] (tested with `v0.6.2`) from the benchmark root directory (into the `libmprompt` sub-directory).
 ```
 $ git clone https://github.com/koka-lang/libmprompt
 $ cd libmprompt
