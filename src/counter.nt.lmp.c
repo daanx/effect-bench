@@ -1,9 +1,9 @@
 /* ----------------------------------------------------------------------------
  
 -----------------------------------------------------------------------------*/
-#include <mpeff.h>
 #include <stdio.h>  
 #include <stdint.h>
+#include <mpeff.h>
 
 #define unreferenced(x) ((void)x)
 
@@ -47,7 +47,7 @@ static void* _state_put(mpe_resume_t* rc, void* local, void* arg) {
 }
 
 static const mpe_handlerdef_t state_def = {
-  MPE_EFFECT(state), NULL, NULL, NULL, {
+  MPE_EFFECT(state), NULL, {
     //{ MPE_OP_GENERAL, MPE_OPTAG(state,get), &_state_get },
     //{ MPE_OP_GENERAL, MPE_OPTAG(state,put), &_state_put },
     { MPE_OP_SCOPED_ONCE, MPE_OPTAG(state,get), &_state_get },

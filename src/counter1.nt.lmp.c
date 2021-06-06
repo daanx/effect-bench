@@ -49,7 +49,7 @@ static void* _state_put(mpe_resume_t* rc, void* local, void* arg) {
   return mpe_resume_tail(rc, arg, NULL);
 }
 
-static const mpe_handlerdef_t state_def = { MPE_EFFECT(state), NULL, NULL, NULL, {
+static const mpe_handlerdef_t state_def = { MPE_EFFECT(state),  NULL, {
   //{ MPE_OP_GENERAL, MPE_OPTAG(state,get), &_state_get },
   //{ MPE_OP_GENERAL, MPE_OPTAG(state,put), &_state_put },
   { MPE_OP_SCOPED_ONCE, MPE_OPTAG(state,get), &_state_get },
@@ -72,7 +72,7 @@ static void* _reader_ask(mpe_resume_t* rc, void* local, void* arg) {
   return mpe_resume_tail(rc, local, local);
 }
 
-static const mpe_handlerdef_t reader_def = { MPE_EFFECT(reader), NULL, NULL, NULL, {
+static const mpe_handlerdef_t reader_def = { MPE_EFFECT(reader), NULL, {
   { MPE_OP_TAIL_NOOP, MPE_OPTAG(reader,ask), &_reader_ask },
   { MPE_OP_NULL, mpe_op_null, NULL }
 }};

@@ -15,9 +15,9 @@ rebuild="no"
 rebuildlmp="no"
 verbose="no"
 ccomp="$CC"
-#kokac="koka"
+kokac="koka"
 #kokac="stack --work-dir=~/home/dev/koka exec koka -- "
-kokac="/mnt/c/Users/daan/dev/koka/.stack-work/install/x86_64-linux-tinfo6/431d4e55f4d2e20c6f6be7ead520a8d7bf88ba5fd63586d6e397109ab1b784f0/8.8.4/bin/koka"
+#kokac="/mnt/c/Users/daan/dev/koka/.stack-work/install/x86_64-linux-tinfo6/431d4e55f4d2e20c6f6be7ead520a8d7bf88ba5fd63586d6e397109ab1b784f0/8.8.4/bin/koka"
 
 if [ -z "$ccomp" ]; then
   ccomp="gcc -g"

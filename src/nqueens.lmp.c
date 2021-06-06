@@ -166,9 +166,9 @@ static void* _choice_choose(mpe_resume_t* rc, void* local, void* arg) {
 }
   
 
-static const mpe_handlerdef_t choice_def = { MPE_EFFECT(choice), NULL, NULL, &_choice_result, {
+static const mpe_handlerdef_t choice_def = { MPE_EFFECT(choice), &_choice_result, {
   { MPE_OP_SCOPED, MPE_OPTAG(choice,choose), &_choice_choose },
-  { MPE_OP_NEVER,  MPE_OPTAG(choice,fail), &_choice_fail },
+  { MPE_OP_ABORT,  MPE_OPTAG(choice,fail), &_choice_fail },
   { MPE_OP_NULL, mpe_op_null, NULL }
 }};
 
